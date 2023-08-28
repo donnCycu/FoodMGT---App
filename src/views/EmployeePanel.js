@@ -1,31 +1,31 @@
 import React from 'react'
-import {Avatar, Box, WrapItem, Button, Flex, Text, IconButton,useBreakpointValue } from "@chakra-ui/react";
-import {MdOutlineHistoryEdu,} from 'react-icons/md'
+import {Avatar, Box, WrapItem, Button, Flex, Text,useBreakpointValue } from "@chakra-ui/react";
 import {RiLogoutCircleLine} from 'react-icons/ri'
 import {CiSettings} from 'react-icons/ci'
 import { MdHistory } from 'react-icons/md';
-import { BiSupport } from 'react-icons/bi';
+import { BiSupport,BiDish } from 'react-icons/bi';
 import { RiOrderPlayFill, RiMoneyDollarCircleLine } from 'react-icons/ri';
 import { AiFillSetting } from 'react-icons/ai';
 import { Link } from 'react-router-dom';
 import { useDisclosure } from "@chakra-ui/react";
 import SupportModal from '../components/popups/SupportModal'
 import RevenueModal from "../components/popups/RevenueModal";
+import HistoryModal from '../components/popups/HistoryModal';
 
 const EmployeePanel = () => {
     const { isOpen: isUtargOpen, onOpen: onUtargOpen, onClose: onUtargClose } = useDisclosure();
     const { isOpen: isSupportOpen, onOpen: onSupportOpen, onClose: onSupportClose } = useDisclosure();
+    const { isOpen: isHistoryOpen, onOpen: onHistoryOpen, onClose: onHistoryClose } = useDisclosure();
 
     const menuItems = [
-        { id: 'history', label: 'Historia zamówień', icon: <MdHistory size={25} />, route: '/history', onClick: null },
+        { id: 'history', label: 'Historia zamówień', icon: <MdHistory size={25} />, route: null, onClick: onHistoryOpen },
         { id: 'revenue', label: 'Utarg', icon: <RiMoneyDollarCircleLine size={25} />, route: null, onClick: onUtargOpen },
         { id: 'settings', label: 'Ustawienia', icon: <AiFillSetting size={25} />, route: '/settings', onClick: null },
         { id: 'support', label: 'Support', icon: <BiSupport size={25} />, route: null, onClick: onSupportOpen },
-        { id: 'order-list', label: 'Obecne zamówienia', icon: <BiSupport size={25} />, route: '/order-list', onClick: null },
+        { id: 'order-list', label: 'Obecne zamówienia', icon: <BiDish size={25} />, route: '/order-list', onClick: null },
         { id: 'order', label: 'Złóż zamówienie', icon: <RiOrderPlayFill size={25} />, route: '/order', onClick: null },
     ];
     const flexDirection = useBreakpointValue({ base: 'column', md: 'row' });
-    const boxWidth = useBreakpointValue({ base: '100%', sm: '60%', md: '40%', lg: '30%' });
     const buttonWidth = useBreakpointValue({ base: '100px', md: '150px' });
     const buttonHeight = useBreakpointValue({ base: '100px', md: '150px' });
     const buttonMarginBottom = useBreakpointValue({ base: '4', sm: '6', md: '8', lg: '10' });
@@ -110,6 +110,7 @@ const EmployeePanel = () => {
             </Box>
             <RevenueModal isOpen={isUtargOpen} onClose={onUtargClose} />
             <SupportModal isOpen={isSupportOpen} onClose={onSupportClose} />
+            <HistoryModal isOpen={isHistoryOpen} onClose={onHistoryClose} />
         </Box>
     )
 }
