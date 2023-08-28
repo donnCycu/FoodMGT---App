@@ -3,8 +3,11 @@ import { Box, Icon } from '@chakra-ui/react';
 import { FaFont } from 'react-icons/fa';
 import LoginForm from './components/LoginForm';
 import Dashboard from './views/Dashboard';
+import EmployeePanel from './views/EmployeePanel';
+import OrderPage from './views/OrderPage';
+import OrderList from './views/OrderList';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
-
+import './index.css';
 const App = () => {
     return (
         <Router>
@@ -30,6 +33,9 @@ const App = () => {
                     </Box>
                 }/>
                 <Route path="/dashboard" element={<Dashboard />} />
+                <Route path="/employeepanel" element={<EmployeePanel />} />
+                <Route path="/order" element={<OrderPage/>} />
+                <Route path="/order-list" element={<OrderList/>} />
             </Routes>
         </Router>
     );
