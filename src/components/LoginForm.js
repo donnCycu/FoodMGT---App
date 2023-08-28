@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Checkbox, Button, Input, Box, Heading, Text, Link, Icon } from '@chakra-ui/react';
+import { Checkbox, Button, Input, Box, Heading, Text, Link, } from '@chakra-ui/react';
 import { FaFacebookF, FaGoogle } from 'react-icons/fa';
 
 const LoginForm = () => {
