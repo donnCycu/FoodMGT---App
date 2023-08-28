@@ -13,6 +13,7 @@ import Role from '../components/subpanels/emplo/Role'
 import General from '../components/subpanels/emplo/General'
 import Warehouse from '../components/subpanels/warehouse/Warehouse';
 import Orders from '../components/subpanels/Orders';
+import WorkTime from '../components/subpanels/WorkTime';
 
 const TopBar = ({ menu, subMenu, handleSubMenuClick }) => {
     return (
@@ -59,7 +60,11 @@ const Dashboard = () => {
                 'Zamówienia': Orders,
 
             }},
-        {name: 'Czas pracy', icon: FaUserClock,  },
+        {name: 'Czas pracy', icon: FaUserClock,
+            subMenu: {
+                'Czas pracy': WorkTime,
+
+            }},
         {name: 'Terminarz', icon: MdEditCalendar,  },
         {name: 'Wiadomości', icon: RiMessage3Fill,  },
         {name: 'Wynagrodzenia', icon: TbReportMoney,  },

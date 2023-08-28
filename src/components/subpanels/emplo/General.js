@@ -17,8 +17,38 @@ import {
 import { ImBin2 } from 'react-icons/im';
 import { IconButton } from "@chakra-ui/react";
 
+const TableRow = ({ item, handleDeleteClick }) => {
+    const [currentHourlyRate, setCurrentHourlyRate] = useState(item.hourlyRate);
+    return (
+        <Tr key={item.id}>
+            <Td>{`${item.firstName} ${item.lastName}`}</Td>
+            <Td>{item.position}</Td>
+            <Td>
+                <Editable
+                    defaultValue={currentHourlyRate.toString()}
+                    onSubmit={value => setCurrentHourlyRate(parseFloat(value))}
+                >
+                    <EditablePreview />
+                    <EditableInput w={40} px={2} borderColor="brand.200" />
+                </Editable>
+            </Td>
+            <Td>{item.hoursWorked}</Td>
+            <Td>{currentHourlyRate * item.hoursWorked}</Td>
+            <Td>{item.orders}</Td>
+            <Td>
+                <IconButton
+                    aria-label="Usuń"
+                    icon={<ImBin2 />}
+                    colorScheme="red"
+                    variant="ghost"
+                    onClick={() => handleDeleteClick(item.id)}
+                />
+            </Td>
+        </Tr>
+    );
+};
 const General = () => {
-    const [positions, setPositions] = useState([
+    const [positions] = useState([
         'Wszystkie',
         'Kelner',
         'Kucharz',
@@ -33,7 +63,8 @@ const General = () => {
             firstName: "Jan",
             lastName: "Kowalski",
             position: "Kelner",
-            salary: 2500,
+            hourlyRate: 20,
+            hoursWorked: 125,
             orders: 10,
         },
         {
@@ -41,7 +72,8 @@ const General = () => {
             firstName: "Anna",
             lastName: "Nowak",
             position: "Kucharz",
-            salary: 3000,
+            hourlyRate: 25,
+            hoursWorked: 120,
             orders: 15,
         },
         // ...
@@ -113,43 +145,16 @@ const General = () => {
                         <Tr fontSize={12}>
                             <Th>Imię i nazwisko</Th>
                             <Th>Pozycja</Th>
+                            <Th>Stawka godzinowa</Th>
+                            <Th>Ilość godzin</Th>
                             <Th>Wynagrodzenie</Th>
                             <Th>Ilość zamówień</Th>
                             <Th>Akcje</Th>
                         </Tr>
                     </Thead>
                     <Tbody>
-                        {data.map((item, index) => (
-                            <Tr key={item.id}>
-                                <Td>{`${item.firstName} ${item.lastName}`}</Td>
-                                <Td>
-                                    <Editable defaultValue={item.position}>
-                                        <EditablePreview />
-                                        <EditableInput w={40} px={2} />
-                                    </Editable>
-                                </Td>
-                                <Td>
-                                    <Editable defaultValue={item.salary}>
-                                        <EditablePreview />
-                                        <EditableInput w={40} px={2} borderColor="brand.200" />
-                                    </Editable>
-                                </Td>
-                                <Td>
-                                    <Editable defaultValue={item.orders}>
-                                        <EditablePreview />
-                                        <EditableInput w={40} px={2} borderColor="brand.200" />
-                                    </Editable>
-                                </Td>
-                                <Td>
-                                    <IconButton
-                                        aria-label="Usuń"
-                                        icon={<ImBin2 />}
-                                        colorScheme="red"
-                                        variant="ghost"
-                                        onClick={() => handleDeleteClick(item.id)}
-                                    />
-                                </Td>
-                            </Tr>
+                        {data.map((item) => (
+                            <TableRow key={item.id} item={item} handleDeleteClick={handleDeleteClick} />
                         ))}
                     </Tbody>
                 </Table>

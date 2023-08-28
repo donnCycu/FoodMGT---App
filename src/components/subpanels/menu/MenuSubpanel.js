@@ -8,6 +8,7 @@ const MenuSubpanel = ({ activeSubMenu }) => {
             {activeSubMenu === 'Produkty' && <h1>Produkty Subpanel</h1>}
             {activeSubMenu === 'Składniki' && <h1>Składniki Subpanel</h1>}
         </Box>
+
     );
 };
 
