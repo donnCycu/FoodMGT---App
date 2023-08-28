@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { CircularProgress } from '@chakra-ui/react';
 import { Text, Box, Flex, Button, Modal, ModalOverlay, ModalContent, ModalHeader, ModalBody, ModalCloseButton, Table, Thead, Tbody, Tr, Th, Td } from '@chakra-ui/react';
 
 const TableLayout = ({ onSelectTable, selectedTable, tableStatus }) => {
@@ -13,18 +14,9 @@ const TableLayout = ({ onSelectTable, selectedTable, tableStatus }) => {
     };
 
     const tables = floorTables[currentFloor] || [];
-    const navigate = useNavigate();
 
     return (
         <Flex direction="column" alignItems="start" justifyContent="start">
-            <Button
-                w={44}
-                variant="ghost"
-                onClick={() => navigate("/employeepanel")}
-            >
-                Wróć do dashboardu
-            </Button>
-
             <Flex mb={4}>
                 {floors.map((floor) => (
                     <Button
@@ -63,10 +55,38 @@ const TableLayout = ({ onSelectTable, selectedTable, tableStatus }) => {
     );
 };
 
+const ActiveOrders = ({ tableStatus, onSelectTable }) => {
+    return (
+        <Flex direction="column" mt={4} ml={3}>
+            <Text fontSize="2xl" mb={4}>Aktywne zamówienia:</Text>
+            {Object.entries(tableStatus).map(([table, details]) => (
+                <Box key={table} mb={4} pb={4} borderBottom="1px solid black">
+                    <Text fontSize="xl">{`Stolik ${table}`} - {`Cena: ${details.price} zł`}</Text>
+                    <Flex direction="column" ml={3} my={2}>
+                        {details.items.map((item, index) => (
+                            <Text key={index}>{`${item} x1 - 6,99 zł`}</Text>
+                        ))}
+                    </Flex>
+                    <Button mt={2} size="sm" className="accept-button" onClick={() => onSelectTable(table)}>
+                        Zapłać
+                    </Button>
+                </Box>
+            ))}
+        </Flex>
+    );
+};
+
+
+
+
 const OrderList = () => {
     const [selectedTable, setSelectedTable] = useState(null);
     const [isOpen, setIsOpen] = useState(false);
-    const [tableStatus, ] = useState({
+    const [selectedPaymentMethod, setSelectedPaymentMethod] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
+
+
+    const [tableStatus] = useState({
         1: { price: 20, items: ['Pizza', 'Coke'], discount: 5 },
         3: { price: 50, items: ['Pasta', 'Wine'], discount: 0 }
     });
@@ -81,12 +101,38 @@ const OrderList = () => {
     const closeModal = () => {
         setIsOpen(false);
     };
+
     const finalPrice = tableStatus[selectedTable]?.price - tableStatus[selectedTable]?.discount;
+
+    const navigate = useNavigate();
+
+    const handlePayment = () => {
+        setIsLoading(true);
+        setTimeout(() => {
+            setIsLoading(false);
+            closeModal();
+        }, 2000);
+
+    };
+
 
     return (
         <Box px={4} py={6} h="100vh" bgGradient="linear(to-br, #ED8245 -190%, #ffffff 100%)">
-
-            <TableLayout onSelectTable={onSelectTable} selectedTable={selectedTable} tableStatus={tableStatus} />
+            <Button
+                w={44}
+                variant="ghost"
+                onClick={() => navigate("/employeepanel")}
+            >
+                Wróć do dashboardu
+            </Button>
+            <Flex flexDirection={['column', 'row']} h="100%">
+                <Box flex="1">
+                    <ActiveOrders tableStatus={tableStatus} onSelectTable={onSelectTable} />
+                </Box>
+                <Box flex="1">
+                    <TableLayout onSelectTable={onSelectTable} selectedTable={selectedTable} tableStatus={tableStatus} />
+                </Box>
+            </Flex>
             <Modal isOpen={isOpen} onClose={closeModal}>
                 <ModalOverlay />
                 <ModalContent>
@@ -111,14 +157,45 @@ const OrderList = () => {
                                 ))}
                             </Tbody>
                         </Table>
-                        <Text mt={4}>Cena: {tableStatus[selectedTable]?.price} zł</Text>
-                        <Text>Rabat: {tableStatus[selectedTable]?.discount} zł</Text>
-                        <Text>Razem: {finalPrice} zł</Text>
+                        <Flex mt={4} fontSize="sm">
+                            <Text mr={2} fontWeight={500}>Cena: </Text>
+                            <Text >{tableStatus[selectedTable]?.price} zł</Text>
+                        </Flex>
+                        <Flex fontSize="sm">
+                            <Text mr={2} fontWeight={500}>Rabat: </Text>
+                            <Text >{tableStatus[selectedTable]?.discount} zł</Text>
+                        </Flex>
+                        <Flex >
+                            <Text mr={2} fontWeight={500}>Razem: </Text>
+                            <Text > {finalPrice} zł</Text>
+                        </Flex>
+                        <Flex justifyContent="space-between" mt={4}>
+                            {['Karta', 'Gotówka', 'Faktura', 'Bon'].map((method) => (
+                                <Button
+                                    key={method}
+                                    onClick={() => setSelectedPaymentMethod(method)}
+                                    bg={selectedPaymentMethod === method ? "#ED8245" : "initial"}
+                                >
+                                    {method}
+                                </Button>
+                            ))}
+                        </Flex>
                         <Flex alignItems="end" justifyContent="end">
-                            <Button className="accept-button" mt={5}>
+                            <Button className="accept-button" mt={5} onClick={handlePayment} isDisabled={!selectedPaymentMethod}>
                                 Zapłać
                             </Button>
                         </Flex>
+
+                        <Flex flexDirection="column" justifyContent="center" alignItems="center">
+                            {isLoading && (
+                                <>
+                                    <Text>Trwa drukowanie paragonu</Text>
+                                    <CircularProgress isIndeterminate color="brand.100" />
+                                </>
+                            )}
+                        </Flex>
+
+
                     </ModalBody>
                 </ModalContent>
             </Modal>
