@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Checkbox, Button, Input, Box, Heading, Text, Link, } from '@chakra-ui/react';
+import { Checkbox, Button, Input, Box, Heading, Text, } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 import { FaFacebookF, FaGoogle } from 'react-icons/fa';
 
 const LoginForm = () => {
@@ -39,7 +40,7 @@ const LoginForm = () => {
                     <Checkbox colorScheme="orange" borderColor="gray.400"isChecked={rememberMe} onChange={(e) => setRememberMe(e.target.checked)}>
                         Zapamiętaj mnie
                     </Checkbox>
-                    <Link color="#ED8245">Zapomniałeś hasła?</Link>
+                    <Link to="/remindpassword" color="#ED8245">Zapomniałeś hasła?</Link>
                 </Box>
             </Box>
 
