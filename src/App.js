@@ -1,5 +1,5 @@
 import React from 'react';
-import { Flex, Text, Box } from '@chakra-ui/react';
+import {  Box } from '@chakra-ui/react';
 
 import LoginForm from './components/LoginForm';
 import Dashboard from './views/Dashboard';
@@ -9,7 +9,8 @@ import OrderList from './views/OrderList';
 import { BrowserRouter as Router, Route, Routes,  } from 'react-router-dom';
 import './index.css';
 import MainRoutes from "./views/MainRoutes";
-
+import RemindPassword from "./views/RemindPassword";
+import AppNameLogo from "./components/AppNameLogo";
 const App = () => {
     return (
         <Router>
@@ -18,10 +19,8 @@ const App = () => {
                     <Route path="/login" element={
                         <Box display="flex" width="full" height="100vh" backgroundColor="#E6E6E6">
                             <Box width="50%" height="full" bg="rgba(237, 130, 69, 0.37)" borderRightRadius="200px">
-                                <Flex alignItems="center" justifyContent="center" h="100%" fontWeight={600} fontSize="5rem" className="redhat">
-                                    <Text textColor="#ED8245" >Food</Text>
-                                    <Text textColor="#8A8A8A">MGT.</Text>
-                                </Flex>
+                                <AppNameLogo fontSize="5rem" width="100%" height="100%" fontWeight={600} />
+
                             </Box>
                             <Box
 
@@ -42,6 +41,7 @@ const App = () => {
                     <Route path="/employeepanel" element={<EmployeePanel />} />
                     <Route path="/order" element={<OrderPage />} />
                     <Route path="/order-list" element={<OrderList />} />
+                    <Route path="/remindpassword" element={<RemindPassword />} />
                 </Routes>
             </>
         </Router>
