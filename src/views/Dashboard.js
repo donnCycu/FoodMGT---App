@@ -53,7 +53,9 @@ const Dashboard = () => {
                 'Ogólne': General,
                 'Role': Role
             }},
-        {name: 'Stan magazynu', icon: MdStore, component: Warehouse},
+        {name: 'Stan magazynu', icon: MdStore, subMenu: {
+                'Stan magazynowy': Warehouse,
+            }},
         {name: 'Raporty', icon: MdReport,  },
         {name: 'Zamówienia', icon: MdShoppingCart,
             subMenu: {
@@ -65,9 +67,8 @@ const Dashboard = () => {
                 'Czas pracy': WorkTime,
 
             }},
-        {name: 'Terminarz', icon: MdEditCalendar,  },
-        {name: 'Wiadomości', icon: RiMessage3Fill,  },
-        {name: 'Wynagrodzenia', icon: TbReportMoney,  },
+
+
     ];
 
     const handleMenuClick = (menu) => {

@@ -208,7 +208,7 @@ const ProductComponent = () => {
                             </Select>
                         </Box>
                         <Box display="flex" alignItems="end" justifyContent="end" w="full">
-                            <Button background="brand.100" fontSize="0.8rem" color="brand.300" onClick={handleAddProductClick}>
+                            <Button className="accept-button" onClick={handleAddProductClick}>
                                 Dodaj produkt
                             </Button>
                         </Box>

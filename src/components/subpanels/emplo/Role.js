@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useToast } from "@chakra-ui/react";
+
 import {
     Box,
     Heading,
@@ -35,6 +37,11 @@ const Role = () => {
     const [newRoleName, setNewRoleName] = useState('');
     const [newPermissions, setNewPermissions] = useState([]);
     const [showAddRoleModal, setShowAddRoleModal] = useState(false);
+    const toast = useToast();
+
+    const checkForChanges = (oldRole, newRole) => {
+        return oldRole.name !== newRole.name || oldRole.permissions !== newRole.permissions;
+    };
 
     const handleEditClick = (role) => {
         setSelectedRole(role);
@@ -44,22 +51,88 @@ const Role = () => {
     };
 
     const handleDeleteClick = (id) => {
-        const updatedRoles = roles.filter((role) => role.id !== id);
-        setRoles(updatedRoles);
+        const roleExists = roles.some((role) => role.id === id);
+        if (roleExists) {
+            const updatedRoles = roles.filter((role) => role.id !== id);
+            setRoles(updatedRoles);
+            toast({
+                title: 'Operacja udana.',
+                description: 'Rola została usunięta',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
+        } else {
+            toast({
+                title: 'Error.',
+                description: 'Nie udało się usunąć roli.',
+                status: 'error',
+                duration: 3000,
+                isClosable: true,
+            });
+        }
     };
 
     const handleSaveEdit = () => {
-        const updatedRoles = roles.map((role) => {
-            if (role.id === selectedRole.id) {
-                return { ...role, name: newRoleName, permissions: newPermissions };
-            }
-            return role;
-        });
-        setRoles(updatedRoles);
+        if (newRoleName === "") {
+            toast({
+                title: "Error.",
+                description: "Pola nie mogą byc puste!",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+            return;
+        }
+
+        const isChanged = checkForChanges(selectedRole, { name: newRoleName, permissions: newPermissions });
+
+        if (isChanged) {
+            const updatedRoles = roles.map((role) => {
+                if (role.id === selectedRole.id) {
+                    return { ...role, name: newRoleName, permissions: newPermissions };
+                }
+                return role;
+            });
+            setRoles(updatedRoles);
+            toast({
+                title: 'Operacja udana.',
+                description: 'Zaktualizowano rolę',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
+        } else {
+            toast({
+                title: 'Brak zmian',
+                description: 'Nie wprowadzono żadnych zmian w roli',
+                status: 'info',
+                duration: 3000,
+                isClosable: true,
+            });
+        }
         cancelEdit();
     };
 
     const handleAddRole = () => {
+        if (newRoleName === "" || newPermissions.length === 0) {
+            toast({
+                title: "Error.",
+                description: "Uzupełnij pola aby dodać nową rolę!",
+                status: "error",
+                duration: 3000,
+                isClosable: true,
+            });
+            return;
+        }else{
+            toast({
+                title: 'Operacja udana.',
+                description: 'Utworzono nową rolę',
+                status: 'success',
+                duration: 3000,
+                isClosable: true,
+            });
+        }
         const newRole = {
             id: roles.length + 1,
             name: newRoleName,
@@ -84,6 +157,11 @@ const Role = () => {
             setNewPermissions([...newPermissions, permission]);
         }
     };
+    const closeModal = () => {
+        setIsEditing(false);
+        setShowAddRoleModal(false);
+        cancelEdit();
+    };
 
     return (
         <Box py={8} w="full" color="brand.300">
@@ -101,23 +179,14 @@ const Role = () => {
                 <Box display="flex" flexDirection="column" w="full" mx={10}>
                     <Button w="8%"
                            mb={4}
+                            px={8}
+                            fontWeight={500}
                             color="brand.300"
-                            fontWeight={400}
-                            backgroundColor="transparent"
-                            _hover={{
-                                color: "#ED8245",
-                                backgroundColor: "transparent",
-                                borderBottom: '2px',
-                                borderColor: '#ED8245',
-                                borderRadius: 'none'
-                            }}
-                            _focus={{
-                                color: "#ED8245",
-                                backgroundColor: "transparent",
-                                borderBottom: '2px',
-                                borderColor: '#ED8245',
-                                borderRadius: 'none'
-                            }}  onClick={() => setShowAddRoleModal(true)}>Dodaj rolę</Button>
+                            background="transparent"
+                            fontSize="0.8rem"
+                            _hover={{ color: "#ED8245", backgroundColor: "transparent", borderBottom: '2px', borderColor: '#ED8245', borderRadius: 'none' }}
+                            _focus={{ color: "#ED8245", backgroundColor: "transparent", borderBottom: '2px', borderColor: '#ED8245', borderRadius: 'none' }}
+                            onClick={() => setShowAddRoleModal(true)}>Dodaj rolę</Button>
                     <Table variant="simple">
                         <Thead>
                             <Tr>
@@ -151,11 +220,11 @@ const Role = () => {
                     </Table>
                 </Box>
             </Box>
-            <Modal isOpen={isEditing || showAddRoleModal} onClose={() => setShowAddRoleModal(false)}>
-                <ModalOverlay />
+            <Modal isOpen={isEditing || showAddRoleModal} onClose={closeModal}>
+            <ModalOverlay />
                 <ModalContent>
                     <ModalHeader>{selectedRole ? 'Edytuj rolę' : 'Dodaj nową rolę'}</ModalHeader>
-                    <ModalCloseButton />
+                    <ModalCloseButton onClick={closeModal}/>
                     <ModalBody>
                         <FormControl mb={4}>
                             <FormLabel>Nazwa roli</FormLabel>
@@ -182,7 +251,7 @@ const Role = () => {
                             >
                                 Odczyt
                             </Checkbox>
-                            {/* Add more checkboxes for other permissions */}
+
                         </FormControl>
                     </ModalBody>
                     <ModalFooter>
