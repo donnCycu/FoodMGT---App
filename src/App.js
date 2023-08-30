@@ -10,6 +10,8 @@ import { BrowserRouter as Router, Route, Routes,  } from 'react-router-dom';
 import './index.css';
 import MainRoutes from "./views/MainRoutes";
 import RemindPassword from "./views/RemindPassword";
+import LoginEmployee from "./views/LoginEmployee";
+import EmployeeSettings from "./views/EmployeeSettings";
 import AppNameLogo from "./components/AppNameLogo";
 const App = () => {
     return (
@@ -42,6 +44,8 @@ const App = () => {
                     <Route path="/order" element={<OrderPage />} />
                     <Route path="/order-list" element={<OrderList />} />
                     <Route path="/remindpassword" element={<RemindPassword />} />
+                    <Route path="/settings" element={<EmployeeSettings />} />
+                    <Route path="/loginemployee" element={<LoginEmployee />} />
                 </Routes>
             </>
         </Router>
