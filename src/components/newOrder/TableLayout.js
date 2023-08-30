@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, Box, Flex, Button } from '@chakra-ui/react';
+import { Text, Flex, Button } from '@chakra-ui/react';
 
 const TableLayout = ({ onSelectTable, selectedTable }) => {
     const [currentFloor, setCurrentFloor] = useState('Parter');

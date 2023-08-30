@@ -4,17 +4,19 @@
 }
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Red Hat Text', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: 'Red Hat Text', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color:#5C5C5C;
+  background: linear-gradient(to bottom right, #ED8245 -190%, #ffffff 100%);
 }
+html {
+  background: linear-gradient(to bottom right, #ED8245 -190%, #ffffff 100%);
 
+}
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+  font-family: 'Red Hat Text', sans-serif;
+
   color:#5C5C5C;
 }
 
